@@ -1,0 +1,7 @@
+{
+    "watch": [
+        "./src"
+    ],
+    "ext": "ts",
+    "exec": "PORT=3333 ts-node --inspect -r tsconfig-paths/register ./src/server.ts"
+}
