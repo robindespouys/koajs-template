@@ -14,7 +14,6 @@ export class Server {
         let dbConnection: any;
         const myApp = new Koa();
         dbConnection = await postgresDB();
-        console.log("MDR");
         console.log(`${process.env.NODE_ENV} MODE`);
 
         /**
