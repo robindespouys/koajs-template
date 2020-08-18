@@ -1,31 +1,21 @@
 // server.ts
 
-import { postgresDBDev, postgresDBProd } from './databases/create-connections-db';
+import { postgresDB } from './databases/create-connections-db';
 import { restRouter } from './routes/rest-routes';
 import * as bodyParser from 'koa-bodyparser';
 import * as Koa from 'koa';
-import { exit } from 'process';
+import path = require('path');
+import dotenv = require('dotenv');
+
+dotenv.config({path : path.resolve(__dirname, `../config/${process.env.ENVIRONMENT}.env`)});
 
 export default class Server {
     public static async startServer(): Promise<any> {
         let dbConnection: any;
         const myApp = new Koa();
-        switch (process.env.NODE_ENV || 'development') {
-            case 'development': {
-                dbConnection = await postgresDBDev();
-                console.log("DEVELOPMENT MODE");
-                break;
-            }
-            case 'production': {
-                dbConnection = await postgresDBProd();
-                console.log("PRODUCTION MODE");
-                break;
-            }
-            default: {
-                console.log("UNKNOWN MODE");
-                exit(1);
-            }
-        }
+        dbConnection = await postgresDB();
+        console.log("MDR");
+        console.log(`${process.env.NODE_ENV} MODE`);
 
         /**
          * Enable bodyParser for easier body parsing. you can still have fun with ctx.req

@@ -4,10 +4,12 @@ A template for building a simple API with Koa.js framework
 
 ### Configure database connection
 
-I use the [typeorm](https://github.com/typeorm/typeorm) ORM. [Here](https://typeorm.io/) you'll find the documentation in an other format. 
+I use the [typeorm](https://github.com/typeorm/typeorm) ORM. [Here](https://typeorm.io/) you'll find the documentation in an other format.
+
+you should create *dev.env* and *prod.env* files by copying the *.example files in [config](./config).
 
 I chose to use a postgresql database but you can use whatever you like.
-Just refer to the documentation for adapting the descriptions in [create-connections-db.ts](./src/databases/create-connections-db.ts).
+Just refer to the documentation for adapting the options in [create-connections-db.ts](./src/databases/create-connections-db.ts) and the *.env files in [config](./config).
 
 If you don't already have a database ready to connect you can always use [docker](https://github.com/docker/docker-ce)
 
@@ -32,7 +34,7 @@ docker run --rm --name postgres-dockerized -e POSTGRES_USER=postgresuser -e POST
   docker-machine ip default
   ```
 
-3. Use this value to update [create-connections-db.ts](./src/databases/create-connections-db.ts).
+3. Use this value to update *.env files in [config](./config).
 
 ### Create the database(s) 
 
