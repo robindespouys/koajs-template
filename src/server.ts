@@ -9,7 +9,7 @@ import dotenv = require('dotenv');
 
 dotenv.config({path : path.resolve(__dirname, `../config/${process.env.ENVIRONMENT}.env`)});
 
-export default class Server {
+export class Server {
     public static async startServer(): Promise<any> {
         let dbConnection: any;
         const myApp = new Koa();

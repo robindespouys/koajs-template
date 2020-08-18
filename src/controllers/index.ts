@@ -1,3 +1,3 @@
 // controllers/index.ts
 
-export { default as user } from './user';
+export { UserController as user } from './user';

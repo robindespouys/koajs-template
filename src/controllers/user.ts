@@ -3,7 +3,7 @@
 import { BaseContext } from 'koa';
 import { UserUtils } from './../utils/user-utils';
 
-export default class UserController {
+export class UserController {
 
     public static async getAllUsers(ctx: BaseContext) {
         const result: any = await UserUtils.getAllUsers();
