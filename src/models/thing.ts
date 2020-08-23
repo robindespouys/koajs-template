@@ -38,7 +38,10 @@ export class Thing {
   public quantity: number;
 
   @Column('int')
-  public power: number;
+  public worth: number;
+
+  @Column('int')
+  public value: number;
 
   @CreateDateColumn()
   public createdAt: Date;

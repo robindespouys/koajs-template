@@ -34,7 +34,8 @@ export class ThingUtils {
     thingToBeSaved.name = parameters.name;
     thingToBeSaved.description = parameters.description;
     thingToBeSaved.quantity = parameters.quantity;
-    thingToBeSaved.power = parameters.power;
+    thingToBeSaved.worth = parameters.worth;
+    thingToBeSaved.value = parameters.value;
     return await this.validateThing(thingToBeSaved);
   }
 
@@ -50,7 +51,8 @@ export class ThingUtils {
       if (newContent.name) { thingToBeUpdated.name = newContent.name; }
       if (newContent.description) { thingToBeUpdated.description = newContent.description; }
       if (newContent.quantity) { thingToBeUpdated.quantity = newContent.quantity; }
-      if (newContent.power) { thingToBeUpdated.power = newContent.power; }
+      if (newContent.worth) { thingToBeUpdated.worth = newContent.worth; }
+      if (newContent.value) { thingToBeUpdated.value = newContent.value; }
       return await this.validateThing(thingToBeUpdated);
     }
     return thingToBeUpdated;
