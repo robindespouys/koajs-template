@@ -1,11 +1,11 @@
 // models/user.ts
 
 import {
-    Entity,
-    PrimaryGeneratedColumn,
-    Column,
-    CreateDateColumn,
-    UpdateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 /**
@@ -24,20 +24,45 @@ import { Length, IsEmail } from 'class-validator';
  */
 export class User {
 
-    @PrimaryGeneratedColumn('uuid')     // Tells Postgres to generate a Unique Key for this column
-    public id: string;                         // Name of the column is id and type is string
+  @PrimaryGeneratedColumn('uuid')
+  public id: string;
 
-    @Column('text')
-    public name: string;
+  @Column('text')
+  public name: string;
 
-    @Column('text')
-    @Length(5, 100)
-    @IsEmail()
-    public email: string;
+  @Column('text')
+  @Length(5, 100)
+  @IsEmail()
+  public email: string;
 
-    @CreateDateColumn()
-    public createdAt: Date;
+  @Column('text')
+  public role: string;
 
-    @UpdateDateColumn()
-    public updatedAt: Date;
+  @CreateDateColumn()
+  public createdAt: Date;
+
+  @UpdateDateColumn()
+  public updatedAt: Date;
+
+  @Column('text')
+  private hashedPassword: string;
+
+  @Column('text')
+  private salt: string;
+
+  public getHashedPassword(): string {
+    return this.hashedPassword;
+  }
+
+  public getSalt(): string {
+    return this.salt;
+  }
+
+  public setHashedPassword(hashedPassword: string) {
+    this.hashedPassword = hashedPassword;
+  }
+
+  public setSalt(salt: string) {
+    this.salt = salt;
+  }
 }

@@ -22,7 +22,7 @@ export class UserUtils {
   }
 
   public static async getAllUsers(): Promise<any> {
-    const users: User[] = await getManager().getRepository(User).find();
+    const users: User[] = await getManager().getRepository(User).find({select: ["email", "name", "role", "id"]});
     return {
       status: users.length > 0 ? 200 : 204,
       body: users,
@@ -30,10 +30,13 @@ export class UserUtils {
   }
 
   public static async createUser(parameters: any): Promise<any> {
-    const userToBeSaved: User = new User();
-    userToBeSaved.name = parameters.name;
-    userToBeSaved.email = parameters.email;
-    return await this.validateUser(userToBeSaved);
+    const userToCreate: User = new User();
+    userToCreate.name = parameters.name;
+    userToCreate.email = parameters.email;
+    userToCreate.role = parameters.role;
+    userToCreate.setHashedPassword(parameters.hashedPassword);
+    userToCreate.setSalt(parameters.salt);
+    return await this.validateUser(userToCreate);
   }
 
   public static async updateUser(userId: string, newContent: any): Promise<any> {
@@ -69,14 +72,14 @@ export class UserUtils {
     return userToDelete;
   }
 
-  private static async getOneUser(userId: string): Promise<any | User> {
+  public static async getOneUser(userId: string): Promise<any | User> {
     if (!validator.isUUID(userId)) {
       return {
         status: 400,
         body: 'The user id provided is not a valid UUID',
       };
     }
-    return await getManager().getRepository(User).findOne(userId);
+    return await getManager().getRepository(User).findOne({select: ["email", "name", "role"], where: {id: userId}});
   }
 
   private static async validateUser(user: User): Promise<any> {
