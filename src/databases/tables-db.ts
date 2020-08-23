@@ -6,4 +6,5 @@
  */
 
 import { User } from '../models/user';
-export const tables = [User];
+import { Thing } from '../models/thing';
+export const tables = [User, Thing];
