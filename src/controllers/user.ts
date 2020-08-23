@@ -6,8 +6,6 @@ import { Context } from 'koa';
 export class UserController {
 
   public static async getAllUsers(ctx: Context) {
-    console.log("on a été authentifié qui suis-je??");
-    console.log(ctx.request.body.currentUser.id);
     const result: any = await UserUtils.getAllUsers();
     ctx.body = result.body;
     ctx.status = result.status;
