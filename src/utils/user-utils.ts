@@ -8,7 +8,7 @@ export class UserUtils {
     const user = await this.getOneUser(userId);
     if (!user) {
       return {
-        status: 401,
+        status: 404,
         body: 'The user you are trying to retrieve doesn\'t exist in the db',
       };
     }
@@ -22,7 +22,7 @@ export class UserUtils {
   }
 
   public static async getAllUsers(): Promise<any> {
-    const users: User[] = await getManager().getRepository(User).find({select: ["email", "name", "role", "id"]});
+    const users: User[] = await getManager().getRepository(User).find({ select: ["email", "name", "role", "id"] });
     return {
       status: users.length > 0 ? 200 : 204,
       body: users,
@@ -64,22 +64,23 @@ export class UserUtils {
       };
     }
     if (userToDelete instanceof User) {
+      await getManager().getRepository(User).remove(userToDelete);
       return {
         status: 204,
-        body: await getManager().getRepository(User).remove(userToDelete),
+        body: `User ${userId} deleted`,
       };
     }
     return userToDelete;
   }
 
-  public static async getOneUser(userId: string): Promise<any | User> {
+  private static async getOneUser(userId: string): Promise<any | User> {
     if (!validator.isUUID(userId)) {
       return {
         status: 400,
         body: 'The user id provided is not a valid UUID',
       };
     }
-    return await getManager().getRepository(User).findOne({select: ["email", "name", "role"], where: {id: userId}});
+    return await getManager().getRepository(User).findOne({ select: ["email", "name", "role", "id"], where: { id: userId } });
   }
 
   private static async validateUser(user: User): Promise<any> {
@@ -87,14 +88,27 @@ export class UserUtils {
     const userRepository: Repository<User> = getManager().getRepository(User);
     const result: any = {};
     if (errors.length > 0) {
+      const body: any[] = [];
+      errors.forEach(error => {
+        body.push({
+          property: error.property,
+          value: error.value,
+          constraints: error.constraints,
+        });
+      });
       result.status = 400;
-      result.body = errors;
-    } else if (await userRepository.findOne({ email: user.email })) {
-      result.status = 400;
-      result.body = 'The specified e-mail address already exists';
+      result.body = body;
     } else {
-      result.status = 201;
-      result.body = await userRepository.save(user);
+      const existingUserWithThisEmail = await userRepository.findOne({ email: user.email });
+      if ((existingUserWithThisEmail && user.id && existingUserWithThisEmail.id !== user.id)
+        || (!user.id && existingUserWithThisEmail)) {
+        result.status = 400;
+        result.body = 'The specified e-mail address already exists';
+      }
+      else {
+        result.status = 201;
+        result.body = await userRepository.save(user);
+      }
     }
     return result;
   }

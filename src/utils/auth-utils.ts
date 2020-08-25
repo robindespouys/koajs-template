@@ -26,6 +26,8 @@ export class AuthUtils {
         user: {
           email: userRecord.email,
           name: userRecord.name,
+          role: userRecord.role,
+          id: userRecord.id,
         },
         token: this.generateJWT(userRecord),
       },
@@ -33,8 +35,8 @@ export class AuthUtils {
     };
   }
 
-  public static async signIn(email: string, password: string): Promise<any> {
-    const userRecord: User = await getManager().getRepository(User).findOne(email);
+  public static async signIn(emailInput: string, password: string): Promise<any> {
+    const userRecord: User = await getManager().getRepository(User).findOne({email: emailInput});
     if (!userRecord) {
       return {
         status: 404,
@@ -54,6 +56,8 @@ export class AuthUtils {
         user: {
           email: userRecord.email,
           name: userRecord.name,
+          role: userRecord.role,
+          id: userRecord.id,
         },
         token: this.generateJWT(userRecord),
       },

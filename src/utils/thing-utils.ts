@@ -8,7 +8,7 @@ export class ThingUtils {
     const thing = await this.getOneThing(thingId);
     if (!thing) {
       return {
-        status: 401,
+        status: 404,
         body: 'The thing you are trying to retrieve doesn\'t exist in the db',
       };
     }
@@ -67,9 +67,10 @@ export class ThingUtils {
       };
     }
     if (thingToDelete instanceof Thing) {
+      await getManager().getRepository(Thing).remove(thingToDelete);
       return {
         status: 204,
-        body: await getManager().getRepository(Thing).remove(thingToDelete),
+        body: `Thing ${thingId} deleted`,
       };
     }
     return thingToDelete;
@@ -90,15 +91,27 @@ export class ThingUtils {
     const thingRepository: Repository<Thing> = getManager().getRepository(Thing);
     const result: any = {};
     if (errors.length > 0) {
+      const body: any[] = [];
+      errors.forEach(error => {
+        body.push({
+          property: error.property,
+          value: error.value,
+          constraints: error.constraints,
+        });
+      });
       result.status = 400;
-      result.body = errors;
-    } else if (await thingRepository.findOne({ name: thing.name })) {
+      result.body = body;
+    } else {
+      const existingThingWithThisName = await thingRepository.findOne({ name: thing.name });
+      if ((existingThingWithThisName && thing.id && existingThingWithThisName.id !== thing.id)
+        || (!thing.id && existingThingWithThisName)) {
       result.status = 400;
       result.body = 'The specified named thing already exists';
     } else {
       result.status = 201;
       result.body = await thingRepository.save(thing);
     }
+  }
     return result;
   }
 

@@ -1,7 +1,6 @@
 // routes/rest-routes.ts
 import * as Router from 'koa-router';
 import * as controller from './../controllers';
-import isAuth from './../middlewares/isAuth';
 
 export const restRouter = new Router();
 

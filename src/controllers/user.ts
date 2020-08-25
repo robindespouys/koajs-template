@@ -22,11 +22,4 @@ export class UserController {
     ctx.body = result.body;
     ctx.status = result.status;
   }
-
-  public static async deleteUser(ctx: any) {
-    const result = await UserUtils.deleteUser(ctx.params.id);
-    ctx.body = result.body;
-    ctx.status = result.status;
-  }
-
 }

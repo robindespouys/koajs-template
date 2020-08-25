@@ -36,5 +36,7 @@ export class AuthController {
     /**
      * should revoke Token by adding previous token to a black list
      */
+    ctx.body = 'Sign-out is not yet implemented';
+    ctx.status = 200;
   }
 }
