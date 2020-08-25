@@ -35,7 +35,7 @@ export class UserUtils {
     userToCreate.email = parameters.email;
     userToCreate.role = parameters.role;
     userToCreate.setHashedPassword(parameters.hashedPassword);
-    userToCreate.setSalt(parameters.salt);
+    userToCreate.salt = parameters.salt;
     return await this.validateUser(userToCreate);
   }
 

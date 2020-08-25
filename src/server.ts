@@ -15,7 +15,7 @@ export class Server {
     let dbConnection: any;
     const myApp = new Koa();
     dbConnection = await postgresDB();
-    console.log(`${process.env.NODE_ENV} MODE`);
+    console.log(`${process.env.ENVIRONMENT} MODE`);
 
     /**
      * Enable bodyParser for easier body parsing. you can still have fun with ctx.req

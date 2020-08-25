@@ -48,25 +48,18 @@ export class User {
 
   @Column('text')
   @IsString()
-  private hashedPassword: string;
+  public salt: string;
 
   @Column('text')
   @IsString()
-  private salt: string;
+  private hashedPassword: string;
 
   public getHashedPassword(): string {
     return this.hashedPassword;
-  }
-
-  public getSalt(): string {
-    return this.salt;
   }
 
   public setHashedPassword(hashedPassword: string) {
     this.hashedPassword = hashedPassword;
   }
 
-  public setSalt(salt: string) {
-    this.salt = salt;
-  }
 }
