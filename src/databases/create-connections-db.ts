@@ -29,7 +29,7 @@ export const postgresDB = async () => {
             ca: fs.readFileSync(process.env.DB_SSL_CA_PATH).toString(),
         },
         entities: tables,
-        logging: logging,
+        logging,
         synchronize: true,
     }).then(_connection => {
         console.log(`Connected to ${process.env.NODE_ENV} Database !`);

@@ -12,7 +12,7 @@ describe('Start server', async () => {
   it('sould start the server', async () => {
     server = await Server.startServer();
     console.log("Server started");
-  })
+  });
 });
 
 describe('Create things', () => {
@@ -197,5 +197,5 @@ describe('Stop server', async () => {
     await server.app.close();
     await server.dbConnection.close();
     console.log("Server stopped");
-  })
+  });
 });
