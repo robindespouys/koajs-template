@@ -12,7 +12,7 @@ import {
  * Import functions from the class-valadiator package in order
  * to validate input data when creating or editing a user
  */
-import { Length, IsEmail } from 'class-validator';
+import { Length, IsEmail, IsString } from 'class-validator';
 
 /**
  * This decorator : @, specify the name of the table
@@ -28,6 +28,7 @@ export class User {
   public id: string;
 
   @Column('text')
+  @IsString()
   public name: string;
 
   @Column('text')
@@ -36,6 +37,7 @@ export class User {
   public email: string;
 
   @Column('text')
+  @IsString()
   public role: string;
 
   @CreateDateColumn()
@@ -45,9 +47,11 @@ export class User {
   public updatedAt: Date;
 
   @Column('text')
+  @IsString()
   private hashedPassword: string;
 
   @Column('text')
+  @IsString()
   private salt: string;
 
   public getHashedPassword(): string {
