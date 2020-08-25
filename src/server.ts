@@ -31,10 +31,10 @@ export class Server {
     console.log(`listening on port ${portNumber}`);
 
     return {
-      connection: dbConnection,
+      dbConnection,
       app: myApp.listen(portNumber),
     };
   }
 }
 
-if (process.env.NODE_ENV !== 'test') Server.startServer();
+if (process.env.ENVIRONMENT !== 'test') Server.startServer();
