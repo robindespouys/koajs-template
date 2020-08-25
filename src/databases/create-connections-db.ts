@@ -7,8 +7,16 @@
 import { createConnection } from 'typeorm';
 import { tables } from './tables-db';
 import fs = require('fs');
+import { LoggerOptions } from 'typeorm/logger/LoggerOptions';
 
 export const postgresDB = async () => {
+    const logging: LoggerOptions = [];
+    if (process.env.ACTIVATE_LOG_QUERIES === 'true') {
+      logging.push("query");
+    }
+    if (process.env.ACTIVATE_LOG_ERRORS === 'true') {
+      logging.push("error");
+    }
 
     return await createConnection({
         type: 'postgres',
@@ -21,7 +29,7 @@ export const postgresDB = async () => {
             ca: fs.readFileSync(process.env.DB_SSL_CA_PATH).toString(),
         },
         entities: tables,
-        logging: ['query', 'error'],
+        logging: logging,
         synchronize: true,
     }).then(_connection => {
         console.log(`Connected to ${process.env.NODE_ENV} Database !`);
