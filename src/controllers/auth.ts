@@ -32,7 +32,7 @@ export class AuthController {
     ctx.status = result.status;
   }
 
-  public static async signOut(ctx: any) {
+  public static async signOut(ctx: Context) {
     /**
      * should revoke Token by adding previous token to a black list
      */
