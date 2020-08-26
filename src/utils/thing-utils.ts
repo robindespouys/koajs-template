@@ -24,7 +24,7 @@ export class ThingUtils {
   public static async getAllThings(): Promise<any> {
     const things: Thing[] = await getManager().getRepository(Thing).find();
     return {
-      status: things.length > 0 ? 200 : 204,
+      status: things.length > 0 ? 200 : 200,
       body: things,
     };
   }
@@ -69,7 +69,7 @@ export class ThingUtils {
     if (thingToDelete instanceof Thing) {
       await getManager().getRepository(Thing).remove(thingToDelete);
       return {
-        status: 204,
+        status: 200,
         body: `Thing ${thingId} deleted`,
       };
     }

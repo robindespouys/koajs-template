@@ -2,14 +2,13 @@ import { expect } from 'chai';
 import { ThingUtils } from './../src/utils/thing-utils';
 import { Thing } from './../src/models/thing';
 import { Server } from './../src/server';
-import request = require('supertest');
 import 'mocha';
 
 let server: any;
 let createdThing: Thing;
 
-describe('Start server', async () => {
-  it('sould start the server', async () => {
+describe('Start server', () => {
+  it('Should start the server', async () => {
     server = await Server.startServer();
     console.log("Server started");
   });
@@ -137,9 +136,9 @@ describe('Delete Things', () => {
   });
 
   describe('Delete the previously created Thing', () => {
-    it(`Should return status 204 and Thing id deleted message`, async () => {
+    it(`Should return status 200 and Thing id deleted message`, async () => {
       const thingDeletion = await ThingUtils.deleteThing(createdThing.id);
-      expect(thingDeletion.status).to.equal(204);
+      expect(thingDeletion.status).to.equal(200);
       expect(thingDeletion.body).to.equal(`Thing ${createdThing.id} deleted`);
     });
   });
@@ -172,9 +171,9 @@ describe('Retrieve non existing Things', () => {
         }
       }
     });
-    it('Should return status 204 and an empty Array', async () => {
+    it('Should return status 200 and an empty Array', async () => {
       const thingEntry = await ThingUtils.getAllThings();
-      expect(thingEntry.status).to.equal(204);
+      expect(thingEntry.status).to.equal(200);
       expect(thingEntry.body).to.be.a.instanceof(Array);
       expect(thingEntry.body.length).to.be.equal(0);
     });
@@ -192,8 +191,8 @@ describe('Update a non-existing Thing', () => {
   });
 });
 
-describe('Stop server', async () => {
-  it('sould stop the server', async () => {
+describe('Stop server', () => {
+  it('Should stop the server', async () => {
     await server.app.close();
     await server.dbConnection.close();
     console.log("Server stopped");
