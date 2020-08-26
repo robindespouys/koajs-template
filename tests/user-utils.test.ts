@@ -2,20 +2,17 @@ import { expect } from 'chai';
 import { UserUtils } from './../src/utils/user-utils';
 import { User } from './../src/models/user';
 import { Server } from './../src/server';
-import request = require('supertest');
 import 'mocha';
 
 let server: any;
 let createdUser: User;
 
-describe('Start server', async () => {
-  it('sould start the server', async () => {
+describe('Start server', () => {
+  it('Should start the server', async () => {
     server = await Server.startServer();
     console.log("Server started");
   });
 });
-
-
 
 describe('Create Users', () => {
 
@@ -104,8 +101,6 @@ describe('Update existing Users', () => {
     it('Should return status 400 and email validation error', async () => {
       const updatedUser = await UserUtils.updateUser(createdUser.id, { name: 'newName', email: 'email-domain.com' });
       expect(updatedUser.status).to.equal(400);
-      console.log("updatedUser");
-      console.log(updatedUser);
       expect(updatedUser.body[0].property).to.equal('email');
     });
   });
@@ -196,8 +191,8 @@ describe('Update a non-existing User', () => {
   });
 });
 
-describe('Stop server', async () => {
-  it('sould stop the server', async () => {
+describe('Stop server', () => {
+  it('Should stop the server', async () => {
     await server.app.close();
     await server.dbConnection.close();
     console.log("Server stopped");
