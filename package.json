@@ -8,7 +8,8 @@
         "prod": "ENVIRONMENT=prod pm2 start pm2.config.js",
         "lint": "tslint -c tslint.main.json 'src/**/*.ts' 'tests/**/*.ts'",
         "test": "ENVIRONMENT=test mocha -r ts-node/register ./tests/**/*.test.ts",
-        "coverage": "nyc npm run test"
+        "coverage": "nyc npm run test",
+        "coverage-lcov": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test"
     },
     "repository": {
         "type": "git",
