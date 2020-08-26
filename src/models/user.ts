@@ -1,42 +1,40 @@
 // models/user.ts
 
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-} from 'typeorm';
-
 /**
  * Import functions from the class-valadiator package in order
  * to validate input data when creating or editing a user
  */
-import { Length, IsEmail, IsString } from 'class-validator';
+import { IsEmail, IsString, Length } from "class-validator";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
 /**
  * This decorator : @, specify the name of the table
  */
-@Entity('users')
+@Entity("users")
 
 /**
  * Export the User class so we can use it elsewhere in our project
  */
 export class User {
-
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   public id: string;
 
-  @Column('text')
+  @Column("text")
   @IsString()
   public name: string;
 
-  @Column('text')
+  @Column("text")
   @Length(5, 100)
   @IsEmail()
   public email: string;
 
-  @Column('text')
+  @Column("text")
   @IsString()
   public role: string;
 
@@ -46,11 +44,11 @@ export class User {
   @UpdateDateColumn()
   public updatedAt: Date;
 
-  @Column('text')
+  @Column("text")
   @IsString()
   public salt: string;
 
-  @Column('text')
+  @Column("text")
   @IsString()
   private hashedPassword: string;
 
@@ -61,5 +59,4 @@ export class User {
   public setHashedPassword(hashedPassword: string) {
     this.hashedPassword = hashedPassword;
   }
-
 }

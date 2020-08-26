@@ -1,7 +1,7 @@
-import { getManager, Repository } from 'typeorm';
-import { validate, ValidationError } from 'class-validator';
-import validator from 'validator';
-import { User } from './../models/user';
+import { validate, ValidationError } from "class-validator";
+import { getManager, Repository } from "typeorm";
+import validator from "validator";
+import { User } from "./../models/user";
 
 export class UserUtils {
   public static async getUser(userId: string): Promise<any> {
@@ -9,7 +9,7 @@ export class UserUtils {
     if (!user) {
       return {
         status: 404,
-        body: 'The user you are trying to retrieve doesn\'t exist in the db',
+        body: "The user you are trying to retrieve doesn't exist in the db",
       };
     }
     if (user instanceof User) {
@@ -22,7 +22,9 @@ export class UserUtils {
   }
 
   public static async getAllUsers(): Promise<any> {
-    const users: User[] = await getManager().getRepository(User).find({ select: ["email", "name", "role", "id"] });
+    const users: User[] = await getManager()
+      .getRepository(User)
+      .find({ select: ["email", "name", "role", "id"] });
     return {
       status: users.length > 0 ? 200 : 204,
       body: users,
@@ -39,17 +41,24 @@ export class UserUtils {
     return await this.validateUser(userToCreate);
   }
 
-  public static async updateUser(userId: string, newContent: any): Promise<any> {
+  public static async updateUser(
+    userId: string,
+    newContent: any
+  ): Promise<any> {
     const userToBeUpdated = await this.getOneUser(userId);
     if (!userToBeUpdated) {
       return {
         status: 404,
-        body: 'The user you are trying to update doesn\'t exist in the db',
+        body: "The user you are trying to update doesn't exist in the db",
       };
     }
     if (userToBeUpdated instanceof User) {
-      if (newContent.name) { userToBeUpdated.name = newContent.name; }
-      if (newContent.email) { userToBeUpdated.email = newContent.email; }
+      if (newContent.name) {
+        userToBeUpdated.name = newContent.name;
+      }
+      if (newContent.email) {
+        userToBeUpdated.email = newContent.email;
+      }
       return await this.validateUser(userToBeUpdated);
     }
     return userToBeUpdated;
@@ -60,7 +69,7 @@ export class UserUtils {
     if (!userToDelete) {
       return {
         status: 404,
-        body: 'The user you are trying to delete doesn\'t exist in the db',
+        body: "The user you are trying to delete doesn't exist in the db",
       };
     }
     if (userToDelete instanceof User) {
@@ -77,14 +86,21 @@ export class UserUtils {
     if (!validator.isUUID(userId)) {
       return {
         status: 400,
-        body: 'The user id provided is not a valid UUID',
+        body: "The user id provided is not a valid UUID",
       };
     }
-    return await getManager().getRepository(User).findOne({ select: ["email", "name", "role", "id"], where: { id: userId } });
+    return await getManager()
+      .getRepository(User)
+      .findOne({
+        select: ["email", "name", "role", "id"],
+        where: { id: userId },
+      });
   }
 
   private static async validateUser(user: User): Promise<any> {
-    const errors: ValidationError[] = await validate(user, { skipMissingProperties: true });
+    const errors: ValidationError[] = await validate(user, {
+      skipMissingProperties: true,
+    });
     const userRepository: Repository<User> = getManager().getRepository(User);
     const result: any = {};
     if (errors.length > 0) {
@@ -99,18 +115,22 @@ export class UserUtils {
       result.status = 400;
       result.body = body;
     } else {
-      const existingUserWithThisEmail = await userRepository.findOne({ email: user.email });
-      if ((existingUserWithThisEmail && user.id && existingUserWithThisEmail.id !== user.id)
-        || (!user.id && existingUserWithThisEmail)) {
+      const existingUserWithThisEmail = await userRepository.findOne({
+        email: user.email,
+      });
+      if (
+        (existingUserWithThisEmail &&
+          user.id &&
+          existingUserWithThisEmail.id !== user.id) ||
+        (!user.id && existingUserWithThisEmail)
+      ) {
         result.status = 400;
-        result.body = 'The specified e-mail address already exists';
-      }
-      else {
+        result.body = "The specified e-mail address already exists";
+      } else {
         result.status = 201;
         result.body = await userRepository.save(user);
       }
     }
     return result;
   }
-
 }

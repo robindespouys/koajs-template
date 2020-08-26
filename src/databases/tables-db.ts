@@ -5,6 +5,6 @@
  * the tables we want to include when we connect to the database.
  */
 
-import { User } from '../models/user';
-import { Thing } from '../models/thing';
+import { Thing } from "../models/thing";
+import { User } from "../models/user";
 export const tables = [User, Thing];

@@ -1,10 +1,9 @@
 // controllers/user.ts
 
-import { UserUtils } from './../utils/user-utils';
-import { Context } from 'koa';
+import { Context } from "koa";
+import { UserUtils } from "./../utils/user-utils";
 
 export class UserController {
-
   public static async getAllUsers(ctx: Context) {
     const result: any = await UserUtils.getAllUsers();
     ctx.body = result.body;

@@ -1,5 +1,4 @@
 export class Utils {
-
   public static checkFields(fields: any[], body: any): any {
     let status: number = 200;
     const missingFields: any[] = [];
@@ -12,11 +11,13 @@ export class Utils {
     if (status === 200) {
       return { status: 200 };
     }
-    const message: string = 'Missing field' + (missingFields.length > 1 ? 's : ' : ' : ') + missingFields.toString();
+    const message: string =
+      "Missing field" +
+      (missingFields.length > 1 ? "s : " : " : ") +
+      missingFields.toString();
     return {
       status,
       body: message,
     };
   }
-
 }

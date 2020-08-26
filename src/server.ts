@@ -1,14 +1,16 @@
 // server.ts
 
-import { postgresDB } from './databases/create-connections-db';
-import { restRouter } from './routes/rest-routes';
-import * as bodyParser from 'koa-bodyparser';
-import * as Koa from 'koa';
-import path = require('path');
-import dotenv = require('dotenv');
-import isAuth from './middlewares/isAuth';
+import * as Koa from "koa";
+import * as bodyParser from "koa-bodyparser";
+import { postgresDB } from "./databases/create-connections-db";
+import isAuth from "./middlewares/isAuth";
+import { restRouter } from "./routes/rest-routes";
+import path = require("path");
+import dotenv = require("dotenv");
 
-dotenv.config({ path: path.resolve(__dirname, `../config/${process.env.ENVIRONMENT}.env`) });
+dotenv.config({
+  path: path.resolve(__dirname, `../config/${process.env.ENVIRONMENT}.env`),
+});
 
 export class Server {
   public static async startServer(): Promise<any> {
@@ -37,4 +39,4 @@ export class Server {
   }
 }
 
-if (process.env.ENVIRONMENT !== 'test') Server.startServer();
+if (process.env.ENVIRONMENT !== "test") Server.startServer();

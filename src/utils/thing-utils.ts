@@ -1,7 +1,7 @@
-import { getManager, Repository } from 'typeorm';
-import { validate, ValidationError } from 'class-validator';
-import validator from 'validator';
-import { Thing } from './../models/thing';
+import { validate, ValidationError } from "class-validator";
+import { getManager, Repository } from "typeorm";
+import validator from "validator";
+import { Thing } from "./../models/thing";
 
 export class ThingUtils {
   public static async getThing(thingId: string): Promise<any> {
@@ -9,7 +9,7 @@ export class ThingUtils {
     if (!thing) {
       return {
         status: 404,
-        body: 'The thing you are trying to retrieve doesn\'t exist in the db',
+        body: "The thing you are trying to retrieve doesn't exist in the db",
       };
     }
     if (thing instanceof Thing) {
@@ -39,20 +39,33 @@ export class ThingUtils {
     return await this.validateThing(thingToBeSaved);
   }
 
-  public static async updateThing(thingId: string, newContent: any): Promise<any> {
+  public static async updateThing(
+    thingId: string,
+    newContent: any
+  ): Promise<any> {
     const thingToBeUpdated = await this.getOneThing(thingId);
     if (!thingToBeUpdated) {
       return {
         status: 404,
-        body: 'The thing you are trying to update doesn\'t exist in the db',
+        body: "The thing you are trying to update doesn't exist in the db",
       };
     }
     if (thingToBeUpdated instanceof Thing) {
-      if (newContent.name) { thingToBeUpdated.name = newContent.name; }
-      if (newContent.description) { thingToBeUpdated.description = newContent.description; }
-      if (newContent.quantity) { thingToBeUpdated.quantity = newContent.quantity; }
-      if (newContent.worth) { thingToBeUpdated.worth = newContent.worth; }
-      if (newContent.value) { thingToBeUpdated.value = newContent.value; }
+      if (newContent.name) {
+        thingToBeUpdated.name = newContent.name;
+      }
+      if (newContent.description) {
+        thingToBeUpdated.description = newContent.description;
+      }
+      if (newContent.quantity) {
+        thingToBeUpdated.quantity = newContent.quantity;
+      }
+      if (newContent.worth) {
+        thingToBeUpdated.worth = newContent.worth;
+      }
+      if (newContent.value) {
+        thingToBeUpdated.value = newContent.value;
+      }
       return await this.validateThing(thingToBeUpdated);
     }
     return thingToBeUpdated;
@@ -63,7 +76,7 @@ export class ThingUtils {
     if (!thingToDelete) {
       return {
         status: 404,
-        body: 'The thing you are trying to delete doesn\'t exist in the db',
+        body: "The thing you are trying to delete doesn't exist in the db",
       };
     }
     if (thingToDelete instanceof Thing) {
@@ -80,15 +93,19 @@ export class ThingUtils {
     if (!validator.isUUID(thingId)) {
       return {
         status: 400,
-        body: 'The thing id provided is not a valid UUID',
+        body: "The thing id provided is not a valid UUID",
       };
     }
     return await getManager().getRepository(Thing).findOne(thingId);
   }
 
   private static async validateThing(thing: Thing): Promise<any> {
-    const errors: ValidationError[] = await validate(thing, { skipMissingProperties: true });
-    const thingRepository: Repository<Thing> = getManager().getRepository(Thing);
+    const errors: ValidationError[] = await validate(thing, {
+      skipMissingProperties: true,
+    });
+    const thingRepository: Repository<Thing> = getManager().getRepository(
+      Thing
+    );
     const result: any = {};
     if (errors.length > 0) {
       const body: any[] = [];
@@ -102,17 +119,22 @@ export class ThingUtils {
       result.status = 400;
       result.body = body;
     } else {
-      const existingThingWithThisName = await thingRepository.findOne({ name: thing.name });
-      if ((existingThingWithThisName && thing.id && existingThingWithThisName.id !== thing.id)
-        || (!thing.id && existingThingWithThisName)) {
-      result.status = 400;
-      result.body = 'The specified named thing already exists';
-    } else {
-      result.status = 201;
-      result.body = await thingRepository.save(thing);
+      const existingThingWithThisName = await thingRepository.findOne({
+        name: thing.name,
+      });
+      if (
+        (existingThingWithThisName &&
+          thing.id &&
+          existingThingWithThisName.id !== thing.id) ||
+        (!thing.id && existingThingWithThisName)
+      ) {
+        result.status = 400;
+        result.body = "The specified named thing already exists";
+      } else {
+        result.status = 201;
+        result.body = await thingRepository.save(thing);
+      }
     }
-  }
     return result;
   }
-
 }

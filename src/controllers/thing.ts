@@ -1,10 +1,9 @@
 // controllers/user.ts
 
-import { ThingUtils } from './../utils/thing-utils';
-import { Context } from 'koa';
+import { Context } from "koa";
+import { ThingUtils } from "./../utils/thing-utils";
 
 export class ThingController {
-
   public static async getAllThings(ctx: Context) {
     const result: any = await ThingUtils.getAllThings();
     ctx.body = result.body;
@@ -24,7 +23,10 @@ export class ThingController {
   }
 
   public static async updateThing(ctx: Context) {
-    const result = await ThingUtils.updateThing(ctx.params.id, ctx.request.body);
+    const result = await ThingUtils.updateThing(
+      ctx.params.id,
+      ctx.request.body
+    );
     ctx.body = result.body;
     ctx.status = result.status;
   }
@@ -34,5 +36,4 @@ export class ThingController {
     ctx.body = result.body;
     ctx.status = result.status;
   }
-
 }

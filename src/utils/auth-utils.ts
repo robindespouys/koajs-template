@@ -1,20 +1,24 @@
+import * as argon2 from "argon2";
+import { randomBytes } from "crypto";
+import * as jwt from "jsonwebtoken";
 import { getManager } from "typeorm";
 import { User } from "./../models/user";
-import * as jwt from 'jsonwebtoken';
-import * as argon2 from 'argon2';
-import { randomBytes } from "crypto";
-import { UserUtils } from './user-utils';
+import { UserUtils } from "./user-utils";
 
 export class AuthUtils {
-
-  public static async signUp(email: string, password: string, name: string, role: string): Promise<any> {
+  public static async signUp(
+    email: string,
+    password: string,
+    name: string,
+    role: string
+  ): Promise<any> {
     const salt = randomBytes(32);
     const hashedPassword = await argon2.hash(password, { salt });
     const userCreation = await UserUtils.createUser({
       name,
       hashedPassword,
       email,
-      salt: salt.toString('hex'),
+      salt: salt.toString("hex"),
       role,
     });
     if (userCreation.status !== 201) {
@@ -35,19 +39,27 @@ export class AuthUtils {
     };
   }
 
-  public static async signIn(emailInput: string, password: string): Promise<any> {
-    const userRecord: User = await getManager().getRepository(User).findOne({email: emailInput});
+  public static async signIn(
+    emailInput: string,
+    password: string
+  ): Promise<any> {
+    const userRecord: User = await getManager()
+      .getRepository(User)
+      .findOne({ email: emailInput });
     if (!userRecord) {
       return {
         status: 404,
-        body: 'This user does not exist',
+        body: "This user does not exist",
       };
     } else {
-      const correctPassword = await argon2.verify(userRecord.getHashedPassword(), password);
+      const correctPassword = await argon2.verify(
+        userRecord.getHashedPassword(),
+        password
+      );
       if (!correctPassword) {
         return {
           status: 401,
-          body: 'Incorrect password',
+          body: "Incorrect password",
         };
       }
     }
@@ -76,7 +88,7 @@ export class AuthUtils {
         name: user.name,
         exp: expiration.getTime() / 1000,
       },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET
     );
   }
 }
