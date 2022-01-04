@@ -1,7 +1,8 @@
-import * as argon2 from "argon2";
+import argon2 from "argon2";
 import { randomBytes } from "crypto";
-import * as jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { getManager } from "typeorm";
+
 import { User } from "./../models/user";
 import { UserUtils } from "./user-utils";
 
