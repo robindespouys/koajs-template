@@ -14,9 +14,8 @@ dotenv.config({
 
 export class Server {
   public static async startServer(): Promise<any> {
-    let dbConnection: any;
     const myApp = new Koa();
-    dbConnection = await postgresDB();
+    const dbConnection = await postgresDB();
     console.log(`${process.env.ENVIRONMENT} MODE`);
 
     /**
