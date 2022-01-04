@@ -7,7 +7,7 @@ import {
   UserController,
 } from "./../controllers";
 
-export const restRouter = new Router();
+const restRouter = new Router();
 
 // Routes for the user entity
 restRouter.get("/users", UserController.getAllUsers);
@@ -25,3 +25,5 @@ restRouter.get("/things/:id", ThingController.getThing);
 restRouter.post("/things", ThingController.createThing);
 restRouter.put("/things/:id", ThingController.updateThing);
 restRouter.delete("/things/:id", ThingController.deleteThing);
+
+export default restRouter;
