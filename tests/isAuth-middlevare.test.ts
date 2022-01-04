@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import "mocha";
 import isAuth from "./../src/middlewares/isAuth";
-import { Server } from "./../src/server";
+import { startServer } from "./../src/server";
 import { AuthUtils } from "./../src/utils/auth-utils";
 import { UserUtils } from "./../src/utils/user-utils";
 
@@ -11,8 +11,8 @@ let createdUserToken: string = "";
 
 describe("Start server", () => {
   it("should start the server", async () => {
-    server = await Server.startServer();
-    console.log("Server started");
+    server = await startServer();
+    console.info("Server started");
   });
 });
 
@@ -22,7 +22,7 @@ describe("Test routes which do not need authentication tokens", () => {
       const ctx: any = {};
       ctx.path = "auth/signin";
       await isAuth(ctx, () => {
-        return new Promise(resolve => {
+        return new Promise<void>((resolve) => {
           resolve();
         });
       });
@@ -34,7 +34,7 @@ describe("Test routes which do not need authentication tokens", () => {
       const ctx: any = {};
       ctx.path = "auth/signup";
       await isAuth(ctx, () => {
-        return new Promise(resolve => {
+        return new Promise<void>((resolve) => {
           resolve();
         });
       });
@@ -50,7 +50,7 @@ describe("Test token protected routes", () => {
       ctx.req = {};
       ctx.req.headers = {};
       await isAuth(ctx, () => {
-        return new Promise(resolve => {
+        return new Promise<void>((resolve) => {
           resolve();
         });
       });
@@ -67,7 +67,7 @@ describe("Test token protected routes", () => {
       ctx.req.headers = {};
       ctx.req.headers.authorization = "Bearer invalid-token";
       await isAuth(ctx, () => {
-        return new Promise(resolve => {
+        return new Promise<void>((resolve) => {
           resolve();
         });
       });
@@ -82,12 +82,12 @@ describe("Test token protected routes", () => {
       ctx.path = "/";
       ctx.req = {};
       await isAuth(ctx, () => {
-        return new Promise(resolve => {
+        return new Promise<void>((resolve) => {
           resolve();
         });
       });
       expect(ctx.status).to.be.equal(500);
-      console.log(ctx.body);
+      console.info(ctx.body);
       expect(ctx.body).to.be.equal(
         "Cannot read property 'authorization' of undefined"
       );
@@ -114,7 +114,7 @@ describe("Test token protected routes", () => {
       ctx.request.body = {};
       ctx.req.headers.authorization = `Bearer ${userRegistration.body.token}`;
       await isAuth(ctx, () => {
-        return new Promise(resolve => {
+        return new Promise<void>((resolve) => {
           resolve();
         });
       });
@@ -135,7 +135,7 @@ describe("Test token protected routes", () => {
       ctx.request.body = {};
       ctx.req.headers.authorization = `Bearer ${createdUserToken}`;
       await isAuth(ctx, () => {
-        return new Promise(resolve => {
+        return new Promise<void>((resolve) => {
           resolve();
         });
       });
@@ -151,6 +151,6 @@ describe("Stop server", () => {
   it("Should stop the server", async () => {
     await server.app.close();
     await server.dbConnection.close();
-    console.log("Server stopped");
+    console.info("Server stopped");
   });
 });

@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import "mocha";
 import { Thing } from "./../src/models/thing";
-import { Server } from "./../src/server";
+import { startServer } from "./../src/server";
 import { ThingUtils } from "./../src/utils/thing-utils";
 
 let server: any;
@@ -9,8 +9,8 @@ let createdThing: Thing;
 
 describe("Start server", () => {
   it("Should start the server", async () => {
-    server = await Server.startServer();
-    console.log("Server started");
+    server = await startServer();
+    console.info("Server started");
   });
 });
 
@@ -226,6 +226,6 @@ describe("Stop server", () => {
   it("Should stop the server", async () => {
     await server.app.close();
     await server.dbConnection.close();
-    console.log("Server stopped");
+    console.info("Server stopped");
   });
 });

@@ -3,7 +3,7 @@ import "mocha";
 import request from "supertest";
 
 import { Thing } from "./../src/models/thing";
-import { Server } from "./../src/server";
+import { startServer } from "./../src/server";
 import { UserUtils } from "./../src/utils/user-utils";
 
 let server: any;
@@ -13,8 +13,8 @@ let createdThing: Thing;
 
 describe("Start server", () => {
   it("should start the server", async () => {
-    server = await Server.startServer();
-    console.log("Server started");
+    server = await startServer();
+    console.info("Server started");
   });
 });
 
@@ -42,7 +42,7 @@ describe("Sign-up on /auth/signup route and retrieve jwt", () => {
 describe("Create Things(s) on /things route", () => {
   describe("Create a valid Thing", () => {
     it("Should return status 201 and a representation of the Thing", async () => {
-      const thingCreation: any = await request
+      const thingCreation = await request
         .agent(server.app)
         .post("/things")
         .set({ authorization: `Bearer ${createdUserToken}` })
@@ -153,6 +153,6 @@ describe("Stop server", () => {
   it("Should stop the server", async () => {
     await server.app.close();
     await server.dbConnection.close();
-    console.log("Server stopped");
+    console.info("Server stopped");
   });
 });

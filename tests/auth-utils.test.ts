@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import "mocha";
-import { Server } from "./../src/server";
+import { startServer } from "./../src/server";
 import { AuthUtils } from "./../src/utils/auth-utils";
 import { UserUtils } from "./../src/utils/user-utils";
 
@@ -9,8 +9,8 @@ let creadtedUserId: string = "";
 
 describe("Start server", () => {
   it("should start the server", async () => {
-    server = await Server.startServer();
-    console.log("Server started");
+    server = await startServer();
+    console.info("Server started");
   });
 });
 
@@ -105,6 +105,6 @@ describe("Stop server", () => {
   it("Should stop the server", async () => {
     await server.app.close();
     await server.dbConnection.close();
-    console.log("Server stopped");
+    console.info("Server stopped");
   });
 });
