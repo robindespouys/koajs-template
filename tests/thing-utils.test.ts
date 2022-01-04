@@ -2,7 +2,7 @@ import { expect } from "chai";
 import "mocha";
 import { Thing } from "./../src/models/thing";
 import { startServer } from "./../src/server";
-import { ThingUtils } from "./../src/utils/thing-utils";
+import { ThingUtils } from "../src/controllers/thing";
 
 let server: any;
 let createdThing: Thing;

@@ -9,7 +9,7 @@ import { Connection } from "typeorm";
 
 import { postgresDB } from "./databases/create-connections-db";
 import isAuth from "./middlewares/isAuth";
-import restRouter from "./routes/rest-routes";
+import restRouter from "./routes";
 
 interface Context {
   dbConnection: Connection;
@@ -24,12 +24,12 @@ console.info(`${process.env.ENVIRONMENT} MODE`);
 const portNumber = Number(process.env.PORT) || 3333;
 
 export const startServer: () => Promise<Context> = async () => {
-  const myApp = new Koa();
   const dbConnection = await postgresDB();
 
-  myApp.use(bodyParser());
-  myApp.use(isAuth);
-  myApp.use(restRouter.routes());
+  const myApp = new Koa()
+    .use(bodyParser())
+    .use(isAuth)
+    .use(restRouter.routes());
 
   const app = myApp.listen(portNumber);
   console.info(`listening on port ${portNumber}`);

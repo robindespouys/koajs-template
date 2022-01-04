@@ -50,7 +50,7 @@ export class User {
 
   @Column("text")
   @IsString()
-  private hashedPassword: string;
+  public hashedPassword: string;
 
   public getHashedPassword(): string {
     return this.hashedPassword;

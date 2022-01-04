@@ -1,14 +1,14 @@
 import { JwtPayload, verify } from "jsonwebtoken";
-import { Context } from "koa";
+import { Context, Next } from "koa";
 
-import { UserUtils } from "./../utils/user-utils";
+import { getOneUser } from "../utils/user";
 
-const isAuth = async (ctx: Context, next: () => Promise<any>) => {
+const isAuth = async (ctx: Context, next: Next) => {
   try {
     if (ctx.path.includes("auth/signin") || ctx.path.includes("auth/signup")) {
-      return next();
+      return await next();
     }
-    let loginToken: any = null;
+    let loginToken = null;
     if (ctx.req.headers.authorization) {
       loginToken = ctx.req.headers.authorization.split(" ")[1];
     }
@@ -23,14 +23,12 @@ const isAuth = async (ctx: Context, next: () => Promise<any>) => {
 
     if (payload) {
       const userId = payload.id;
-      const getUser: any = await UserUtils.getUser(userId);
-      if (getUser.status !== 200) {
-        ctx.body = getUser.body;
-        ctx.status = getUser.status;
-      } else {
-        ctx.request.body.currentUser = getUser.body;
-        next();
+      const user = await getOneUser(userId);
+      if (!user) {
+        ctx.status = 404;
+        return;
       }
+      await next();
     }
   } catch (e) {
     ctx.body = e.message;

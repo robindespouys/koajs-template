@@ -1,9 +1,10 @@
 import { expect } from "chai";
 import "mocha";
+
 import isAuth from "./../src/middlewares/isAuth";
 import { startServer } from "./../src/server";
-import { AuthUtils } from "./../src/utils/auth-utils";
-import { UserUtils } from "./../src/utils/user-utils";
+import { Auth } from "../src/controllers/auth";
+import { deleteUser } from "../src/controllers/user";
 
 let server: any;
 let creadtedUserId: string = "";
@@ -96,7 +97,7 @@ describe("Test token protected routes", () => {
 
   describe("Test middleware with a valid authorization header", () => {
     it("Should update the ctx.request.body.currentUser content but not the status nor the body", async () => {
-      const userRegistration: any = await AuthUtils.signUp(
+      const userRegistration: any = await Auth.signUp(
         "super@domain.com",
         "12345",
         "supername",
@@ -121,7 +122,7 @@ describe("Test token protected routes", () => {
       expect(ctx.request.body.currentUser).not.be.equal(undefined);
       expect(ctx.status).to.be.equal(undefined);
       expect(ctx.body).to.be.equal(undefined);
-      await UserUtils.deleteUser(creadtedUserId);
+      await deleteUser(creadtedUserId);
     });
   });
 

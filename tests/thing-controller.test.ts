@@ -4,7 +4,7 @@ import request from "supertest";
 
 import { Thing } from "./../src/models/thing";
 import { startServer } from "./../src/server";
-import { UserUtils } from "./../src/utils/user-utils";
+import { deleteUser } from "../src/controllers/user";
 
 let server: any;
 let createdUserId: string = "";
@@ -148,7 +148,7 @@ describe("Delete Things(s) on /things route", () => {
 
 describe("Stop server", () => {
   it("Should delete the previously created User", async () => {
-    await UserUtils.deleteUser(createdUserId);
+    await deleteUser(createdUserId);
   });
   it("Should stop the server", async () => {
     await server.app.close();
