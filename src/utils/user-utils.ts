@@ -105,13 +105,13 @@ export class UserUtils {
     const result: any = {};
     if (errors.length > 0) {
       const body: any[] = [];
-      errors.forEach(error => {
+      for (const error of errors) {
         body.push({
           property: error.property,
           value: error.value,
           constraints: error.constraints,
         });
-      });
+      }
       result.status = 400;
       result.body = body;
     } else {
