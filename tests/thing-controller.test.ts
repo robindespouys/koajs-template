@@ -1,10 +1,10 @@
 import { expect } from "chai";
 import "mocha";
+import request from "supertest";
+
 import { Thing } from "./../src/models/thing";
 import { Server } from "./../src/server";
 import { UserUtils } from "./../src/utils/user-utils";
-
-import request = require("supertest");
 
 let server: any;
 let createdUserId: string = "";

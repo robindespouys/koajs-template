@@ -1,12 +1,13 @@
 // server.ts
 
-import * as Koa from "koa";
-import * as bodyParser from "koa-bodyparser";
+import Koa from "koa";
+import bodyParser from "koa-bodyparser";
+import path from "path";
+import dotenv from "dotenv";
+
 import { postgresDB } from "./databases/create-connections-db";
 import isAuth from "./middlewares/isAuth";
 import { restRouter } from "./routes/rest-routes";
-import path = require("path");
-import dotenv = require("dotenv");
 
 dotenv.config({
   path: path.resolve(__dirname, `../config/${process.env.ENVIRONMENT}.env`),

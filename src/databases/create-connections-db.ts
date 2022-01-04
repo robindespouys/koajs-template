@@ -5,8 +5,9 @@
  */
 
 import { createConnection } from "typeorm";
+import fs from "fs";
+
 import { tables } from "./tables-db";
-import fs = require("fs");
 
 export const postgresDB = async () => {
   return await createConnection({
@@ -29,7 +30,7 @@ export const postgresDB = async () => {
         : ["error"],
     synchronize: true,
   })
-    .then(_connection => {
+    .then((_connection) => {
       console.log(`Connected to ${process.env.NODE_ENV} Database !`);
       return _connection;
     })
