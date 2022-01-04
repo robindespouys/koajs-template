@@ -1,8 +1,9 @@
-import * as jwt from "jsonwebtoken";
+import { JwtPayload, verify } from "jsonwebtoken";
 import { Context } from "koa";
+
 import { UserUtils } from "./../utils/user-utils";
 
-export default async (ctx: Context, next: () => Promise<any>) => {
+const isAuth = async (ctx: Context, next: () => Promise<any>) => {
   try {
     if (ctx.path.includes("auth/signin") || ctx.path.includes("auth/signup")) {
       return next();
@@ -11,37 +12,30 @@ export default async (ctx: Context, next: () => Promise<any>) => {
     if (ctx.req.headers.authorization) {
       loginToken = ctx.req.headers.authorization.split(" ")[1];
     }
-    let validToken: boolean = false;
-    let validUser: boolean = false;
-    let userId: string = "";
-    jwt.verify(
-      loginToken,
-      process.env.JWT_SECRET,
-      (errorValidation: any, decodedToken: any) => {
-        if (errorValidation == null) {
-          validToken = true;
-          userId = decodedToken.id;
-        } else {
-          ctx.body = errorValidation.message;
-          ctx.status = 401;
-        }
-      }
-    );
-    if (validToken) {
+
+    let payload: JwtPayload;
+    try {
+      payload = verify(loginToken, process.env.JWT_SECRET) as JwtPayload;
+    } catch (error) {
+      ctx.body = error.message;
+      ctx.status = 401;
+    }
+
+    if (payload) {
+      const userId = payload.id;
       const getUser: any = await UserUtils.getUser(userId);
       if (getUser.status !== 200) {
         ctx.body = getUser.body;
         ctx.status = getUser.status;
       } else {
         ctx.request.body.currentUser = getUser.body;
-        validUser = true;
+        next();
       }
-    }
-    if (validUser) {
-      return next();
     }
   } catch (e) {
     ctx.body = e.message;
     ctx.status = 500;
   }
 };
+
+export default isAuth;
