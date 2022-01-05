@@ -1,7 +1,7 @@
 // routes/user.ts
 
 import { Context } from "koa";
-import { object, string } from "joi";
+import joi from "joi";
 
 import * as Auth from "../controllers/auth";
 
@@ -9,11 +9,11 @@ export const signIn = async (ctx: Context) => {
   const {
     value: { email, password },
     error,
-  } = object({
-    email: string()
+  } = joi.object({
+    email: joi.string()
       .required()
       .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } }),
-    password: string().required(),
+    password: joi.string().required(),
   }).validate(ctx.request.body);
   if (error) {
     ctx.status = 400;
@@ -28,12 +28,12 @@ export const signUp = async (ctx: Context) => {
   const {
     value: { email, password, name },
     error,
-  } = object({
-    email: string()
+  } = joi.object({
+    email: joi.string()
       .required()
       .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } }),
-    password: string().required(),
-    name: string().required(),
+    password: joi.string().required(),
+    name: joi.string().required(),
   }).validate(ctx.request.body);
   if (error) {
     ctx.status = 400;
